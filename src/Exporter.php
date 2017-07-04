@@ -235,7 +235,12 @@ class Exporter
         if (is_string($value)) {
             // Match for most non printable chars somewhat taking multibyte chars into account
             if (preg_match('/[^\x09-\x0d\x1b\x20-\xff]/', $value)) {
-                return 'Binary String: 0x' . bin2hex($value);
+                $hex = '0x' . bin2hex($value);
+                $length = min(80, strlen($hex) / 5);
+                if ($length > 20) {
+                    $hex = "\n" . implode("\n", str_split($hex, $length));
+                }
+                return 'Binary String: ' . $hex;
             }
 
             return "'" .

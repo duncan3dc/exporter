@@ -349,6 +349,28 @@ EOF;
         );
     }
 
+
+    public function testLongBinaryStringExport()
+    {
+        $value = '';
+        for ($i = 0; $i < 12; ++$i) {
+            $value .= chr(0) . chr(1) . chr(2) . chr(3) . chr(4);
+        }
+
+        $expected = <<<HEX
+Binary String: 
+0x0001020304000102030400
+010203040001020304000102
+030400010203040001020304
+000102030400010203040001
+020304000102030400010203
+04
+HEX;
+
+        $this->assertSame($expected, $this->exporter->export($value));
+    }
+
+
     public function testNonObjectCanBeReturnedAsArray()
     {
         $this->assertEquals(array(true), $this->exporter->toArray(true));
